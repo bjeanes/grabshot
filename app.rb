@@ -1,4 +1,4 @@
-require 'rubygems'
+ require 'rubygems'
 require 'bundler'
 require 'json'
 
@@ -101,17 +101,20 @@ class Screenshotter
   def self.valid?(params)
     !!(
       http?(params[:url]) &&
-      http?(params[:callback]) &&
+       http?(params[:callback]) &&
       params[:format] =~ /^jpe?g|gif|png$/i)
   end
 
   def self.http?(uri)
     !!(uri.scheme =~ /^https?$/ &&
-      uri.hostname &&
-      (Sinatra::Application.settings.environment.to_s == "development" ||
-        uri.hostname !~ /^\d|localhost/))
+      uri.host &&
+      (development? ||
+        uri.host !~ /^\d|localhost|\[/))
   end
 
+  def self.development?
+    Sinatra::Application.settings.environment.to_s == "development"
+  end
 
   if ENV['KEEP_ALIVE_URL']
     require 'open-uri'
