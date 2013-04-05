@@ -67,10 +67,10 @@ class Screenshotter
 
   def self.take(params)
     puts "Processing: #{params.to_json}"
-    require 'phantomjs'
     url      = params[:url].to_s
     format   = params[:format].to_s.upcase
-    response = JSON.parse(Phantomjs.run(SCRIPT, url, format))
+    json     = `phantomjs #{SCRIPT} #{url} #{format}`
+    response = JSON.parse(json)
     respond(:success, params.merge(response))
     puts "Processed: #{params.to_json}"
   end
