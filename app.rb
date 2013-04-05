@@ -94,7 +94,7 @@ class Screenshotter
     http.use_ssl = true if params[:callback].scheme == "https"
     headers = {'Content-Type' =>'application/json'}
     request = Net::HTTP::Post.new(uri.request_uri, headers)
-    puts request.body = params.to_json
+    request.body = params.to_json
     http.request(request)
   end
 
