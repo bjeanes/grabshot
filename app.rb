@@ -40,12 +40,12 @@ post '/snap' do
   begin
     require 'uri'
 
-    task = Screenshotter.plan(
+    possible = Screenshotter.plan(
       format: params[:format] || "png",
       url: URI.parse(params[:url]),
       callback: URI.parse(params[:callback]))
 
-    if task.possible?
+    if possible
       status 200
       "OK"
     else
@@ -76,9 +76,7 @@ class Screenshotter
   end
 
   def self.plan(params)
-    possible = valid?(params)
-    QUEUE.push params if possible
-    Struct.new(:possible?).new(possible)
+    QUEUE.push params if valid?(params)
   end
 
   private
