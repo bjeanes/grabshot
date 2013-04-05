@@ -2,6 +2,27 @@
 
 Mini API to create screenshots of websites and call back with the image data.
 
+## Using
+
+Post to /snap with the following query params:
+
+* `format`: one of `jpg`, `png`, or `gif` (case-insensitive)
+* `url`: the URL to screenshot
+* `callback`: the URL you want notified on completion
+
+You will get a response back at the callback shortly after with a JSON body that looks like:
+
+    {
+        "url":"http://google.com",
+        "callback":"http://example.com/your/callback",
+        "title":"Google",
+        "imageData":"iVBORw0KGgoAAAANSUhEUgAAAlsAAAG6CAYAAAA/NYPLAAAABHNCSVQICAgIfAhkiAAAAAl...",
+        "format":"PNG",
+        "status":"success"
+    }
+
+The `imageData` key is Base64 encoded.
+
 ## Running
 
 Make sure you have PhantomJS installed.
