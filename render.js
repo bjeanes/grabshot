@@ -1,5 +1,3 @@
-// TODO: http://stackoverflow.com/questions/11408332/phantomjs-exported-pdf-to-stdout
-
 var page = require('webpage').create(),
     system = require('system'),
     fs = require('fs');
