@@ -47,3 +47,10 @@ and Heroku's default Ruby buildpack (already commited in `.buildpacks`:
 
     heroku config:add BUILDPACK_URL=https://github.com/ddollar/heroku-buildpack-multi.git`
     heorku config:add PATH="/usr/local/bin:/usr/bin:/bin:/app/vendor/phantomjs/bin" LD_LIBRARY_PATH="/usr/local/lib:/usr/lib:/lib:/app/vendor/phantomjs/lib"
+
+## TODO
+
+* User-Agent support
+* Dimension support (currently hardcoded to 1280px wide, arbitrary
+  length)
+* Tests (born out of a lazy experiment, but interesting enough to test now)
