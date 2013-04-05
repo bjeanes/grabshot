@@ -54,3 +54,5 @@ and Heroku's default Ruby buildpack (already commited in `.buildpacks`:
 * Dimension support (currently hardcoded to 1280px wide, arbitrary
   length)
 * Tests (born out of a lazy experiment, but interesting enough to test now)
+* Security check (essentially passing in params with only loose checks
+  into exec calls)
