@@ -6,34 +6,19 @@ Bundler.setup(:default)
 require 'sinatra'
 Bundler.setup(:default, settings.environment)
 
+require 'slim'
+
 configure :development do
   require 'rack/reloader'
   Sinatra::Application.reset!
   use Rack::Reloader
 end
 
+set :slim, pretty: true, format: :html5
+set :views, File.join(settings.root, "views")
+
 get '/' do
-  <<-EOResp
-  <p>Post to /snap with the following query params:</p>
-  <ul>
-   <li><code>format</code>: one of "jpg", "png", or "gif"</li>
-   <li><code>url</code>: the url to take a screenshot of</li>
-   <li><code>callback</code>: the URL you want notified on completetion</li>
-  </ul>
-
-  <p>You will get a response back at the callback shortly after with a JSON body that looks like:</p>
-
-  <pre>{
-  "url":"http://google.com",
-  "callback":"http://example.com/your/callback",
-  "title":"Google",
-  "imageData":"iVBORw0KGgoAAAANSUhEUgAAAlsAAAG6CAYAAAA/NYPLAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEwAACxMBAJqcGAAAIABJREFUeJzs3WdgXNWd...",
-  "format":"PNG",
-  "status":"success"
-}</pre>
-
-  <p>The <code>imageData</code> key is Base64 encoded.
-  EOResp
+  slim :index
 end
 
 post '/snap' do
