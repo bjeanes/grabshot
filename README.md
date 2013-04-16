@@ -2,6 +2,8 @@
 
 Mini API to create screenshots of websites and call back with the image data.
 
+**This was a breakable toy that I hacked together as a proof of concept. It's pretty hacky currently, but still pretty young...**
+
 ## Using
 
 Post to /snap with the following query params:
