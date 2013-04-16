@@ -40,8 +40,10 @@
               $.get(binUrl + '/requests', function(data) {
                 var data = $.parseJSON(data[0].body),
                 attrs = {
-                  'src': 'data:image/png;base64,' + data.imageData,
-                  'alt': data.title
+                  src: 'data:image/png;base64,' + data.imageData,
+                  alt: data.title,
+                  width: 205,
+                  height: 154
                 },
                 img = $('<img>').attr(attrs);
 
