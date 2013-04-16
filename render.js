@@ -2,12 +2,12 @@ var page = require('webpage').create(),
     system = require('system'),
     fs = require('fs');
 
-var userAgent = "Grabshot"
+var userAgent = "Grabshot";
 
 var url  = system.args[1];
-var format = system.args[2] || "PNG"
-var width = parseInt(system.args[3]) || 1280
-var height = parseInt(system.args[4]) // default: fit content
+var format = system.args[2] || "PNG";
+var width = parseInt(system.args[3]) || 1280;
+var height = parseInt(system.args[4]); // default: fit content
 var crop = true;
 
 // NOTE: This does not work as "window" size, so height will
@@ -17,7 +17,7 @@ var crop = true;
 page.viewportSize = {
   width: width,
   height: height
-}
+};
 
 function render() {
   var result = page.evaluate(function () {
@@ -25,7 +25,7 @@ function render() {
       title: document.title,
       width: document.body.clientWidth,
       height: document.body.clientHeight,
-    }
+    };
   });
 
   if(crop && height && result.height > height) {
@@ -35,7 +35,7 @@ function render() {
       top: 0,
       left: 0,
       width: width,
-      height: height,
+      height: height
     };
 
     result.height = height;
@@ -45,7 +45,7 @@ function render() {
   result.imageData = page.renderBase64(format);
   result.format = format;
 
-  console.log(JSON.stringify(result))
+  console.log(JSON.stringify(result));
   phantom.exit();
 }
 
@@ -60,6 +60,6 @@ page.onLoadFinished = function (status) {
   }
 
   setTimeout(render, 300);
-}
+};
 
 page.open(url);
