@@ -6,6 +6,7 @@ html lang="en"
     meta name="viewport" content="width=device-width, initial-scale=1.0"
     link rel="stylesheet" href="http://bootswatch.com/cerulean/bootstrap.min.css"
     link rel="stylesheet" href="/css/font-awesome.min.css"
+    link rel="stylesheet" href="/css/code.css"
     title= "Grabshot"
     css:
       body {
@@ -34,41 +35,59 @@ html lang="en"
          padding: 14px 24px;
        }
 
-       .main {
-         margin: 60px 0;
-       }
-       .main p + h4 {
-         margin-top: 28px;
-       }
-
-  body
+  body onload="prettyPrint()"
     .container-narrow
       .masthead
         ul.nav.nav-pills.pull-right
-          li
-            a href="https://github.com/bjeanes/grabshot"
-              i.icon-github.icon-large
-              | Fork
+          li: a href="#docs" Docs
+          li: a href="#demo" Demo
+          li: a href="https://github.com/bjeanes/grabshot"
+            i.icon-github.icon-large
+            | Fork
         h3
           | Grabshot
           small &nbsp; URL screen shotter
 
 
-      .jumbotron
-        h1 Grabshot
+      .jumbotron: h1 Grabshot
 
-      .row-fluid.main
+      section#docs.row-fluid
+        h3 Docs
+
+        h4 Request
+
         p Post to <code>/snap</code> with the following query params:
 
         ul
-          li <code>format</code>: one of "jpg", "png", or "gif" (case-insentive).
+          li <code>format</code>: one of "jpg", "png", or "gif" (case-insentive, defaults to "png").
           li <code>url</code>: the url for which you want a screenshot.
           li <code>callback</code>: the URL that you want notified upon completion.
+
+        p For example:
+
+        pre
+          | $ curl "http://grabshot.heroku.com/?url=http%3A%2F%2Fgoogle.com&format=png&callback=http%3A%2F%2Fexample.com/your/callback"
+
+        p Or, in Ruby:
+
+        pre.prettyprint.lang-ruby
+          | require "net/http"
+            require "uri"
+            uri = URI.parse("http://grabshot.herokuapp.com/snap")
+            params = {
+              "format" => "png",
+              "url" => url,
+              "callback" => "http://example.com/your/callback"
+            }
+
+            Net::HTTP.post_form(uri, params)
+
+        h4 Response (as callback)
 
         p You will get a response back at the callback shortly after with a
           JSON body that looks like:
 
-        pre
+        pre.prettyprint.lang-javascript
           | {
               "url": "http://google.com",
               "callback": "http://example.com/your/callback",
@@ -80,5 +99,20 @@ html lang="en"
 
         p The <code>imageData</code> field is Base-64 encoded.
 
+      section#demo.row-fluid
+        h3 Demo
+
+        .alert.alert-error.cors
+          | Sorry, this example requires a CORS-compatible browser...
+
+        form
+          .input-prepend.input-append
+            label.add-on for="example-url-field" URL:
+            input#example-url-field placeholder="http://grabshot.heroku.com" type="url" name="url" required=true
+            button.btn.btn-primary type="submit" Grab!
+          small.note
+
       script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"
       script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"
+      script src="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.js"
+      script src="/js/grabshot.js"

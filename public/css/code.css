@@ -1,0 +1,11 @@
+.typ {
+  color: #606;
+}
+
+.pun, .opn, .clo {
+  color: #660;
+}
+
+.str {
+  color: #080;
+}
