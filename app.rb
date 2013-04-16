@@ -2,10 +2,8 @@ require 'rubygems'
 require 'bundler'
 require 'json'
 
-Bundler.setup(:default)
+Bundler.setup(:default, ENV["RACK_ENV"] || :development)
 require 'sinatra'
-Bundler.setup(:default, settings.environment)
-
 require 'slim'
 
 configure :development do
