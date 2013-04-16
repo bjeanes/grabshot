@@ -73,10 +73,11 @@ html lang="en"
         pre.prettyprint.lang-ruby
           | require "net/http"
             require "uri"
+
             uri = URI.parse("http://grabshot.herokuapp.com/snap")
             params = {
-              "format" => "png",
-              "url" => url,
+              "format"   => "png",
+              "url"      => "http://google.com",
               "callback" => "http://example.com/your/callback"
             }
 
