@@ -75,6 +75,7 @@ class Screenshotter
     http.use_ssl = true if params[:callback].scheme == "https"
     headers = {'Content-Type' =>'application/json'}
     request = Net::HTTP::Post.new(uri.request_uri, headers)
+    request["User-Agent"] = "Grabshot (https://github.com/bjeanes/grabshot)"
     request.body = params.to_json
     http.request(request)
   end
