@@ -68,21 +68,24 @@ html lang="en"
 
         h4 Request
 
-        p Post to <code>/snap</code> with the following query params:
+        p <code>POST</code> to <code>/snap</code> with the following parameters:
 
         ul
-          li <code>format</code>: one of "jpg", "png", or "gif" (case-insentive, defaults to "png").
           li <code>url</code>: the url for which you want a screenshot.
           li <code>callback</code>: the URL that you want notified upon completion.
+          li <code>format</code>: one of "jpg", "png", or "gif" (case-insentive, defaults to "png").
 
-        p For example:
+        p For example, from the command line:
 
-        pre
-          | $ curl "http://grabshot.herokuapp.com/?url=http%3A%2F%2Fgoogle.com&format=png&callback=http%3A%2F%2Fexample.com/your/callback"
+        pre.prettyprint
+          | curl 'http://grabshot.herokuapp.com/snap' \
+                 -d 'url=http://google.com' \
+                 -d 'format=png' \
+                 -d 'callback=http://example.com/your/callback'
 
         p Or, in Ruby:
 
-        pre.prettyprint.lang-ruby
+        pre.prettyprint
           | require "net/http"
             require "uri"
 
@@ -97,11 +100,19 @@ html lang="en"
 
         h4 Response (as callback)
 
-        p You will get a response back at the callback shortly after with a
-          JSON body that looks like:
+        p Your provided callback URL should receive a <code>POST</code> that
+          looks similar to:
 
-        pre.prettyprint.lang-javascript
-          | {
+        pre.prettyprint
+          | POST /your/callback HTTP/1.1
+            User-Agent: Grabshot (https://github.com/bjeanes/grabshot)
+            Host: example.com
+            Content-Type: application/json
+            Content-Length: 1723
+            Connection: close
+            Accept-Encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+
+            {
               "url": "http://google.com",
               "callback": "http://example.com/your/callback",
               "title": "Google",
