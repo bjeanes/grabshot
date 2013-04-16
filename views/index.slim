@@ -48,11 +48,23 @@ html lang="en"
           | Grabshot
           small &nbsp; URL screen shotter
 
-
       .jumbotron: h1 Grabshot
 
+      section#demo.row-fluid
+        h3 Demo
+
+        .alert.alert-error.cors
+          | Sorry, this example requires a CORS-compatible browser...
+
+        form
+          .input-prepend.input-append
+            label.add-on for="example-url-field" URL:
+            input#example-url-field placeholder="http://grabshot.heroku.com" type="url" name="url" required=true
+            button.btn.btn-primary type="submit" Grab!
+          small.note
+
       section#docs.row-fluid
-        h3 Docs
+        h3 Documentation
 
         h4 Request
 
@@ -99,19 +111,6 @@ html lang="en"
             }
 
         p The <code>imageData</code> field is Base-64 encoded.
-
-      section#demo.row-fluid
-        h3 Demo
-
-        .alert.alert-error.cors
-          | Sorry, this example requires a CORS-compatible browser...
-
-        form
-          .input-prepend.input-append
-            label.add-on for="example-url-field" URL:
-            input#example-url-field placeholder="http://grabshot.heroku.com" type="url" name="url" required=true
-            button.btn.btn-primary type="submit" Grab!
-          small.note
 
       script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"
       script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"
