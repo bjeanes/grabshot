@@ -51,7 +51,7 @@ post '/snap' do
 end
 
 require 'thread'
-Thread.abort_on_exception = true
+
 class Screenshotter
   QUEUE  = Queue.new
   SCRIPT = File.expand_path('../render.js', __FILE__)
@@ -69,6 +69,9 @@ class Screenshotter
     json     = `phantomjs #{SCRIPT} #{url} #{format} #{width} #{height}`
     response = JSON.parse(json)
     respond(:success, params.merge(response))
+  rescue
+    respond(:error, params)
+  ensure
     puts "Processed: #{params.to_json}"
   end
 
