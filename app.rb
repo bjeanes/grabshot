@@ -45,8 +45,11 @@ require 'thread'
 Thread.abort_on_exception = true
 class Screenshotter
   QUEUE  = Queue.new
-  WORKER = Thread.new { loop { Screenshotter.take QUEUE.pop } }
   SCRIPT = File.expand_path('../render.js', __FILE__)
+
+  (ENV['WORKER_COUNT'] || 1).to_i.times do
+    Thread.new { loop { Screenshotter.take QUEUE.pop } }
+  end
 
   def self.take(params)
     puts "Processing: #{params.to_json}"
