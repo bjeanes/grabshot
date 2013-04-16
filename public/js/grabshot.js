@@ -28,7 +28,9 @@
 
       var params = {
         url: form.find('input[name="url"]').val(),
-        callback: 'http://requestb.in/' + postbin.name
+        callback: 'http://requestb.in/' + postbin.name,
+        height: form.find('input[name="height"]').val(),
+        width: form.find('input[name="width"]').val()
       };
 
       $.post('/snap', params, function() {

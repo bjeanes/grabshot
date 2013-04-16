@@ -23,10 +23,18 @@ post '/snap' do
   begin
     require 'uri'
 
+    url      = URI.parse(params[:url])
+    callback = URI.parse(params[:callback])
+    width    = params[:width] && params[:width].to_i
+    height   = params[:height] && params[:height].to_i
+    format   = params[:format] || "png"
+
     possible = Screenshotter.plan(
-      format: params[:format] || "png",
-      url: URI.parse(params[:url]),
-      callback: URI.parse(params[:callback]))
+      format: format,
+      width: width,
+      height: height,
+      url: url,
+      callback: callback)
 
     if possible
       status 200
@@ -55,14 +63,23 @@ class Screenshotter
     puts "Processing: #{params.to_json}"
     url      = params[:url].to_s
     format   = params[:format].to_s.upcase
-    json     = `phantomjs #{SCRIPT} #{url} #{format}`
+    width    = params[:width]
+    height   = params[:height]
+    json     = `phantomjs #{SCRIPT} #{url} #{format} #{width} #{height}`
     response = JSON.parse(json)
     respond(:success, params.merge(response))
     puts "Processed: #{params.to_json}"
   end
 
   def self.plan(params)
-    QUEUE.push params if valid?(params)
+    if valid? params
+      QUEUE.push params
+      true
+    else
+      false
+    end
+  rescue
+    false
   end
 
   private
@@ -84,9 +101,9 @@ class Screenshotter
   end
 
   def self.valid?(params)
-    !!(
-      http?(params[:url]) &&
-       http?(params[:callback]) &&
+    !!(http?(params[:url]) &&
+      http?(params[:callback]) &&
+      params[:width].to_i <= 4000 &&
       params[:format] =~ /^jpe?g|gif|png$/i)
   end
 

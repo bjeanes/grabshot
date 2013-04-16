@@ -41,16 +41,16 @@ Then, to run the application:
 
 ### Heroku
 
-On Heroku, use a buildpack that includes PhantomJS. 
+On Heroku, use a buildpack that includes PhantomJS.
 
 I use [heroku-buildpack-multi](https://github.com/ddollar/heroku-buildpack-multi) to combine
 [heroku-buildpack-phantomjs](https://github.com/stomita/heroku-buildpack-phantomjs)
-and [Heroku's default Ruby buildpack](https://github.com/heroku/heroku-buildpack-ruby) 
+and [Heroku's default Ruby buildpack](https://github.com/heroku/heroku-buildpack-ruby)
 (look at [`.buildpacks`](.buildpacks)):
 
     heroku config:add BUILDPACK_URL=https://github.com/ddollar/heroku-buildpack-multi.git`
-    
-Depending on the order of the buildpacks and any other buildpacks you have, you may need to 
+
+Depending on the order of the buildpacks and any other buildpacks you have, you may need to
 explicitly tweak some environment variables so the app can find `phantomjs`:
 
     heorku config:add \
@@ -60,15 +60,13 @@ explicitly tweak some environment variables so the app can find `phantomjs`:
 ## TODO
 
 * User-Agent support
-* Dimension support (currently hardcoded to 1280px wide, arbitrary
-  length)
 * Tests (born out of a lazy experiment, but interesting enough to test now)
 * Security check (essentially passing in params with only loose checks
   into exec calls)
 * Background workers are kinda ghetto and in Threads at the moment
   * Separate workers; or
-  * Play with `em-synchrony` and hook into 
-    [`EventMachine.popen`](http://eventmachine.rubyforge.org/EventMachine.html#popen-class_method), 
+  * Play with `em-synchrony` and hook into
+    [`EventMachine.popen`](http://eventmachine.rubyforge.org/EventMachine.html#popen-class_method),
     etc., with unicorn/thin. The threads are mostly IO so shouldn't perform too badly, even on MRI.
 
 # License

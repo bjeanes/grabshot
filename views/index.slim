@@ -61,6 +61,8 @@ html lang="en"
             label.add-on for="example-url-field" URL:
             input#example-url-field placeholder="http://grabshot.herokuapp.com" type="url" name="url" required=true
             button.btn.btn-primary type="submit" Grab!
+          input type="hidden" name="width" value="1024"
+          input type="hidden" name="height" value="768"
           small.note
 
       section#docs.row-fluid
@@ -68,19 +70,28 @@ html lang="en"
 
         h4 Request
 
-        p <code>POST</code> to <code>/snap</code> with the following parameters:
+        p <code>POST</code> to <code>/snap</code> with the following parameters (<em>* is required</em>):
 
         ul
-          li <code>url</code>: the url for which you want a screenshot.
-          li <code>callback</code>: the URL that you want notified upon completion.
-          li <code>format</code>: one of "jpg", "png", or "gif" (case-insentive, defaults to "png").
+          li * <code>url</code> - the url for which you want a screenshot.
+          li * <code>callback</code> - the URL that you want notified upon completion.
+          li <code>width</code> - any positive integer less than or equal to 4000 (defaults to <code>1280</code>).
+          li <code>height</code> - any positive integer (defaults to <code>null</code>, which means "fit content").
+          li <code>format</code> - one of "jpg", "png", or "gif" (case-insentive, defaults to "png").
+
+        p
+          small
+            | <strong>Note</strong>: <code>height</code> will <em>crop</em>
+              the image, not behave like a browser's window size. Hopefully
+              <a href="https://github.com/ariya/phantomjs/issues/10619">
+              this can be fixed</a> in the future.
 
         p For example, from the command line:
 
         pre.prettyprint
           | curl 'http://grabshot.herokuapp.com/snap' \
                  -d 'url=http://google.com' \
-                 -d 'format=png' \
+                 -d 'format=png' -d 'width=1024' -d 'height=768' \
                  -d 'callback=http://example.com/your/callback'
 
         p Or, in Ruby:
@@ -91,9 +102,11 @@ html lang="en"
 
             uri = URI.parse("http://grabshot.herokuapp.com/snap")
             params = {
-              "format"   => "png",
-              "url"      => "http://google.com",
-              "callback" => "http://example.com/your/callback"
+              :format   => "png",
+              :url      => "http://google.com",
+              :callback => "http://example.com/your/callback",
+              :width    => 1024,
+              :height   => 768
             }
 
             Net::HTTP.post_form(uri, params)
