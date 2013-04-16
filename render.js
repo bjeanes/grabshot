@@ -33,7 +33,7 @@ page.onLoadFinished = function (status) {
     phantom.exit(1);
   }
 
-  setTimeout(render, 50);
+  setTimeout(render, 300);
 }
 
 page.open(url);
