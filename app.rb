@@ -14,6 +14,7 @@ end
 
 set :slim, pretty: true, format: :html5
 set :views, File.join(settings.root, "views")
+set :server, :puma
 
 get '/' do
   slim :index
