@@ -55,6 +55,8 @@ For instance, I run the app on Heroku by doing the following:
     heroku config:add RUBY_ENGINE="rbx-2.0.0.rc1" # Bump when 2.0.0 is out
     git push heroku
 
+For more on `user-env-compile`, see [this article](https://devcenter.heroku.com/articles/labs-user-env-compile).
+
 ## TODO
 
 See [here](https://trello.com/board/grabshot/516df20a8e01421844001ad0)
