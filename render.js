@@ -4,7 +4,7 @@ var page = require('webpage').create(),
 setTimeout(function() {
   system.stderr.writeLine("Timing out...");
   phantom.exit(2);
-}, 10000);
+}, 60000);
 
 var userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.57 Safari/537.17';
 
