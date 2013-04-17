@@ -4,11 +4,11 @@ var page = require('webpage').create(),
 
 var userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.57 Safari/537.17';
 
-var url  = system.args[1];
+var url    = system.args[1];
 var format = system.args[2] || "PNG";
-var width = parseInt(system.args[3]) || 1280;
+var width  = parseInt(system.args[3]) || 1280;
 var height = parseInt(system.args[4]); // default: fit content
-var crop = true;
+var crop   = true;
 
 // NOTE: This does not work as "window" size, so height will
 // not do as expected here.
