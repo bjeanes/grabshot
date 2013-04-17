@@ -56,24 +56,39 @@ class Screenshotter
   QUEUE  = Queue.new
   SCRIPT = File.expand_path('../render.js', __FILE__)
 
-  (ENV['WORKER_COUNT'] || 1).to_i.times do
-    Thread.new { loop { Screenshotter.take QUEUE.pop } }
+  (ENV['WORKER_COUNT'] || 1).to_i.times do |worker_id|
+    Thread.new do
+      me = Thread.current
+      me[:id] = worker_id
+      me[:job_id] = -1
+
+      loop do
+        me[:job_id] += 1
+        Screenshotter.take QUEUE.pop, "#{me[:id]}-#{me[:job_id]}"
+      end
+    end
   end
 
-  def self.take(params)
-    puts "Processing: #{params.to_json}"
+  def self.take(params, id)
+    puts "[#{id}] Processing: #{params.to_json}"
+    params = params.dup
+
     url      = params[:url].to_s
     format   = params[:format].to_s.upcase
     width    = params[:width]
     height   = params[:height]
-    json     = `phantomjs #{SCRIPT} #{url.inspect} #{format} #{width} #{height}`
+    cmd      = "phantomjs #{SCRIPT} #{url.inspect} #{format} #{width} #{height}"
+    puts "[#{id}] Executing: #{cmd.inspect}"
+    json     = %x[#{cmd}]
     response = JSON.parse(json)
+    params.merge!(response)
     respond(:success, params.merge(response))
   rescue => e
-    p e
+    STDERR.puts e.message
+    STDERR.puts e.backtrace.join("\n")
     respond(:error, params)
   ensure
-    puts "Processed: #{params.to_json}"
+    puts "[#{id}] Processed: #{params.to_json}"
   end
 
   def self.plan(params)
