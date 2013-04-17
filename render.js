@@ -60,7 +60,7 @@ function render() {
   result.imageData = page.renderBase64(format);
   result.format = format;
 
-  system.stdout.writeLine(JSON.stringify(result));
+  console.log(JSON.stringify(result));
   phantom.exit();
 }
 
