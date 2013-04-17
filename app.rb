@@ -70,7 +70,7 @@ class Screenshotter
   end
 
   def self.take(params, id)
-    puts "[#{id}] Processing: #{params.to_json}"
+    puts "[#{id}] Processing: #{params.inspect}"
     params = params.dup
 
     url      = params[:url].to_s
@@ -78,17 +78,25 @@ class Screenshotter
     width    = params[:width]
     height   = params[:height]
     cmd      = "phantomjs #{SCRIPT} #{url.inspect} #{format} #{width} #{height}"
-    puts "[#{id}] Executing: #{cmd.inspect}"
-    json     = %x[#{cmd}]
-    response = JSON.parse(json)
-    params.merge!(response)
-    respond(:success, params.merge(response))
+
+    puts "[#{id}] Executing: #{cmd}"
+    json = JSON.parse(%x[#{cmd}])
+
+    params.merge!(
+      width: json["width"],
+      height: json["height"],
+      title: json["title"],
+      imageData: json["imageData"])
+
+    respond(:success, params)
   rescue => e
     STDERR.puts e.message
     STDERR.puts e.backtrace.join("\n")
+
     respond(:error, params)
   ensure
-    puts "[#{id}] Processed: #{params.to_json}"
+    params[:imageData] = params[:imageData].to_s[0, 20] + "..."
+    puts "[#{id}] Processed: #{params.inspect}"
   end
 
   def self.plan(params)
@@ -108,7 +116,7 @@ class Screenshotter
     require 'net/http'
     require 'net/https'
 
-    params["status"] = status
+    params[:status] = status
 
     uri = params[:callback]
     http = Net::HTTP.new(uri.host, uri.port)
@@ -128,7 +136,8 @@ class Screenshotter
   end
 
   def self.http?(uri)
-    !!(uri.scheme =~ /^https?$/ &&
+    !!(uri &&
+      uri.scheme =~ /^https?$/ &&
       uri.host &&
       (development? ||
         uri.host !~ /^\d|localhost|\[/))

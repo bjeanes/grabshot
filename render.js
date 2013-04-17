@@ -1,10 +1,10 @@
 var page = require('webpage').create(),
-    system = require('system'),
-    fs = require('fs');
+    system = require('system');
 
 setTimeout(function() {
-  phantom.exit(1);
-}, 2000);
+  system.stderr.writeLine("Timing out...");
+  phantom.exit(2);
+}, 5000);
 
 var userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.57 Safari/537.17';
 
@@ -24,7 +24,12 @@ page.viewportSize = {
 };
 
 page.customHeaders = {
-  Referer: url
+  url: 'https://grabshot.herokuapp.com'
+};
+page.onInitialized = function() {
+  // Make sure assets are fetched with the write Referer (else
+  // TypeKit and possibly others don't work...).
+  page.customHeaders.Referer = url;
 };
 
 page.settings.userAgent = userAgent;
@@ -55,21 +60,36 @@ function render() {
   result.imageData = page.renderBase64(format);
   result.format = format;
 
-  console.log(JSON.stringify(result));
+  system.stdout.writeLine(JSON.stringify(result));
   phantom.exit();
 }
 
-page.onError = phantom.onError = function() {
-  console.log("PhantomJS error :(");
+function handleError(type, msg, trace) {
+  var msgStack = [type + 'ERROR: ' + msg];
+  if (trace) {
+    msgStack.push('TRACE:');
+    trace.forEach(function(t) {
+      msgStack.push(' -> ' + (t.file || t.sourceURL) + ': ' + t.line + (t.function ? ' (in function ' + t.function + ')' : ''));
+    });
+  }
+  system.stderr.write(msgStack.join('\n'));
+}
+
+page.onError = function(msg, trace) {
+  handleError('PAGE', msg, trace);
+};
+
+phantom.onError = function(msg, trace) {
+  handleError('PHANTOM', msg, trace);
   phantom.exit(1);
 };
 
 page.onLoadFinished = function (status) {
-  if (status !== 'success') {
-    phantom.exit(1);
-  }
+  var loaded = page.evaluate(function() { return !!document.body; });
 
-  setTimeout(render, 300);
+  if(status == "success" || loaded == true) {
+    setTimeout(render, 300);
+  }
 };
 
 page.open(url);
