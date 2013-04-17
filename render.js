@@ -2,7 +2,7 @@ var page = require('webpage').create(),
     system = require('system'),
     fs = require('fs');
 
-var userAgent = "Grabshot";
+var userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.57 Safari/537.17';
 
 var url  = system.args[1];
 var format = system.args[2] || "PNG";
@@ -18,6 +18,12 @@ page.viewportSize = {
   width: width,
   height: height
 };
+
+page.customHeaders = {
+  Referer: url
+};
+
+page.settings.userAgent = userAgent;
 
 function render() {
   var result = page.evaluate(function () {
