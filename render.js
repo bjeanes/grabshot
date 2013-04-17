@@ -72,7 +72,7 @@ function handleError(type, msg, trace) {
       msgStack.push(' -> ' + (t.file || t.sourceURL) + ': ' + t.line + (t.function ? ' (in function ' + t.function + ')' : ''));
     });
   }
-  system.stderr.write(msgStack.join('\n'));
+  system.stderr.writeLine(msgStack.join('\n'));
 }
 
 page.onError = function(msg, trace) {
