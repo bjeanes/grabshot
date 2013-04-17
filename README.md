@@ -59,7 +59,7 @@ For more on `user-env-compile`, see [this article](https://devcenter.heroku.com/
 
 ## TODO
 
-See [here](https://trello.com/board/grabshot/516df20a8e01421844001ad0)
+See [here](https://trello.com/board/grabshot/516df20a8e01421844001ad0).
 
 # License
 
