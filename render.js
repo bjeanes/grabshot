@@ -2,6 +2,10 @@ var page = require('webpage').create(),
     system = require('system'),
     fs = require('fs');
 
+setTimeout(function() {
+  phantom.exit(1);
+}, 2000);
+
 var userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.57 Safari/537.17';
 
 var url    = system.args[1];
