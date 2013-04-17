@@ -69,7 +69,8 @@ class Screenshotter
     json     = `phantomjs #{SCRIPT} #{url} #{format} #{width} #{height}`
     response = JSON.parse(json)
     respond(:success, params.merge(response))
-  rescue
+  rescue => e
+    p e
     respond(:error, params)
   ensure
     puts "Processed: #{params.to_json}"
