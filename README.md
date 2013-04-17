@@ -42,15 +42,7 @@ explicitly tweak some environment variables so the app can find `phantomjs`:
 
 ## TODO
 
-* User-Agent support
-* Tests (born out of a lazy experiment, but interesting enough to test now)
-* Security check (essentially passing in params with only loose checks
-  into exec calls)
-* Background workers are kinda ghetto and in Threads at the moment
-  * Separate workers; or
-  * Play with `em-synchrony` and hook into
-    [`EventMachine.popen`](http://eventmachine.rubyforge.org/EventMachine.html#popen-class_method),
-    etc., with unicorn/thin. The threads are mostly IO so shouldn't perform too badly, even on MRI.
+See [here](https://trello.com/board/grabshot/516df20a8e01421844001ad0)
 
 # License
 
