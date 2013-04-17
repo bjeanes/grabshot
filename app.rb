@@ -66,7 +66,7 @@ class Screenshotter
     format   = params[:format].to_s.upcase
     width    = params[:width]
     height   = params[:height]
-    json     = `phantomjs #{SCRIPT} #{url} #{format} #{width} #{height}`
+    json     = `phantomjs #{SCRIPT} #{url.inspect} #{format} #{width} #{height}`
     response = JSON.parse(json)
     respond(:success, params.merge(response))
   rescue => e
