@@ -6,7 +6,7 @@ html lang="en"
     meta name="viewport" content="width=device-width, initial-scale=1.0"
     link rel="stylesheet" href="http://bootswatch.com/cerulean/bootstrap.min.css"
     link rel="stylesheet" href="/css/font-awesome.min.css"
-    link rel="stylesheet" href="/css/code.css"
+    link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/github.min.css"
     title= "Grabshot"
     css:
       body {
@@ -35,7 +35,12 @@ html lang="en"
          padding: 14px 24px;
        }
 
-  body onload="prettyPrint()"
+       #docs pre code {
+         background: transparent;
+         padding: 0;
+       }
+
+  body
     .container-narrow
       .masthead
         ul.nav.nav-pills.pull-right
@@ -92,7 +97,7 @@ html lang="en"
 
         p For example, from the command line:
 
-        pre.prettyprint
+        pre: code.bash
           | curl 'http://grabshot.herokuapp.com/snap' \
                  -d 'url=http://google.com' \
                  -d 'format=png' -d 'width=1024' -d 'height=768' \
@@ -100,7 +105,7 @@ html lang="en"
 
         p Or, in Ruby:
 
-        pre.prettyprint
+        pre: code
           | require "net/http"
             require "uri"
 
@@ -120,7 +125,7 @@ html lang="en"
         p Your provided callback URL should receive a <code>POST</code> that
           looks similar to:
 
-        pre.prettyprint
+        pre: code
           | POST /your/callback HTTP/1.1
             User-Agent: Grabshot (https://github.com/bjeanes/grabshot)
             Host: example.com
@@ -146,6 +151,8 @@ html lang="en"
 
       script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"
       script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"
-      script src="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.js"
+      script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/highlight.min.js"
+      javascript:
+        hljs.initHighlightingOnLoad();
       script src="http://imsky.github.io/holder/holder.js"
       script src="/js/grabshot.js"
