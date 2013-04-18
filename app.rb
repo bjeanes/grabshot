@@ -54,7 +54,7 @@ require 'thread'
 
 class Screenshotter
   QUEUE  = Queue.new
-  SCRIPT = File.expand_path('../render.js', __FILE__)
+  SCRIPT = File.expand_path('../render.coffee', __FILE__)
 
   (ENV['WORKER_COUNT'] || 1).to_i.times do |worker_id|
     Thread.new do
