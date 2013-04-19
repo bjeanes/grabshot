@@ -16,8 +16,8 @@ setTimeout ->
 render = ->
   result = page.evaluate ->
     title: document.title
-    width: document.body.clientWidth
-    height: document.body.clientHeight
+    width: document.body?.clientWidth or width
+    height: document.body?.clientHeight or height
 
   if crop and height and result.height > height
     # Cropping isn't exactly what we want, but PhantomJS does
