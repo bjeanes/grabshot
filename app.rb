@@ -63,8 +63,12 @@ class Screenshotter
       me[:job_id] = -1
 
       loop do
-        me[:job_id] += 1
-        Screenshotter.take QUEUE.pop, "#{me[:id]}-#{me[:job_id]}"
+        begin
+          me[:job_id] += 1
+          Screenshotter.take QUEUE.pop, "#{me[:id]}-#{me[:job_id]}"
+        rescue => e
+          log_exception e
+        end
       end
     end
   end
@@ -89,10 +93,8 @@ class Screenshotter
       imageData: json["imageData"])
 
     respond(:success, params)
-  rescue => e
-    STDERR.puts e.message
-    STDERR.puts e.backtrace.join("\n")
-
+  rescue JSON::ParserError => e
+    log_exception(e)
     respond(:error, params)
   ensure
     params[:imageData] = params[:imageData].to_s[0, 20] + "..."
@@ -120,12 +122,18 @@ class Screenshotter
 
     uri = params[:callback]
     http = Net::HTTP.new(uri.host, uri.port)
+    http.ssl_timeout = 5
+    http.open_timeout = 5
+    http.read_timeout = 10
+    http.continue_timeout = 10
     http.use_ssl = true if params[:callback].scheme == "https"
     headers = {'Content-Type' =>'application/json'}
     request = Net::HTTP::Post.new(uri.request_uri, headers)
     request["User-Agent"] = "Grabshot (https://github.com/bjeanes/grabshot)"
     request.body = params.to_json
     http.request(request)
+  rescue => e
+    log_exception e
   end
 
   def self.valid?(params)
@@ -160,4 +168,9 @@ class Screenshotter
       end
     end
   end
+end
+
+def log_exception(e)
+  STDERR.puts "#{e.class}: #{e.message}"
+  STDERR.puts e.backtrace.join("\n")
 end
