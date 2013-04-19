@@ -10,7 +10,7 @@ See [here](http://grabshot.herokuapp.com/#docs) for documentation.
 
 ## Running
 
-Make sure you have PhantomJS installed.
+Make sure you have PhantomJS (>= 1.9.0) installed.
 
 ### OS X
 
