@@ -1,13 +1,9 @@
-require 'rubygems'
-require 'bundler'
-require 'json'
+require 'env'
 
-Bundler.setup(:default, ENV["RACK_ENV"] || :development)
 require 'sinatra'
 require 'slim'
+require 'uri'
 
-lib = File.expand_path("../lib", __FILE__)
-$: << lib unless $:.include?(lib)
 require "screenshotter"
 
 configure :development do
@@ -26,8 +22,6 @@ end
 
 post '/snap' do
   begin
-    require 'uri'
-
     url      = URI.parse(params[:url])
     callback = URI.parse(params[:callback])
     width    = params[:width] && params[:width].to_i

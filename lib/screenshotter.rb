@@ -100,7 +100,7 @@ class Screenshotter
   end
 
   def self.development?
-    Sinatra::Application.settings.environment.to_s == "development"
+    Grabshot.environment == :development
   end
 end
 

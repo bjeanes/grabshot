@@ -11,5 +11,5 @@ gem "puma", "~> 2.0.0.b6"
 gem 'queue_classic'
 
 group :development do
-  gem 'foreman'
+  gem 'foreman', require: false
 end
