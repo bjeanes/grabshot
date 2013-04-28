@@ -31,6 +31,7 @@ PLATFORMS
 
 DEPENDENCIES
   foreman
+  multi_json
   puma (~> 2.0.0.b6)
   queue_classic
   sinatra

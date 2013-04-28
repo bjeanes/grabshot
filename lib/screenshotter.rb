@@ -1,5 +1,5 @@
 require 'thread'
-require 'json'
+require 'multi_json'
 require 'net/http'
 require 'net/https'
 
@@ -35,7 +35,7 @@ class Screenshotter
     cmd      = "phantomjs #{SCRIPT} #{url.inspect} #{format} #{width} #{height}"
 
     puts "[#{id}] Executing: #{cmd}"
-    json = JSON.parse(%x[#{cmd}])
+    json = MultiJson.load(%x[#{cmd}])
 
     params.merge!(
       width: json["width"],
@@ -44,7 +44,7 @@ class Screenshotter
       imageData: json["imageData"])
 
     respond(:success, params)
-  rescue JSON::ParserError => e
+  rescue MultiJson::LoadError => e
     log_exception(e)
     respond(:error, params)
   ensure
@@ -78,7 +78,7 @@ class Screenshotter
     headers = {'Content-Type' =>'application/json'}
     request = Net::HTTP::Post.new(uri.request_uri, headers)
     request["User-Agent"] = "Grabshot (https://github.com/bjeanes/grabshot)"
-    request.body = params.to_json
+    request.body = MultiJson.dump(params)
     http.request(request)
   rescue => e
     log_exception e
