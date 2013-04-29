@@ -3,9 +3,9 @@ system = require("system")
 
 userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.57 Safari/537.17"
 url = system.args[1]
-format = system.args[2] or "PNG"
+format = (system.args[2] or "PNG").toUpperCase()
 width = parseInt(system.args[3]) or 1280
-height = parseInt(system.args[4]) # default: fit content
+height = parseInt(system.args[4]) or null # default: fit content
 crop = true
 
 setTimeout ->
@@ -15,11 +15,21 @@ setTimeout ->
 
 render = ->
   result = page.evaluate ->
-    title: document.title
-    width: document.body?.clientWidth or width
-    height: document.body?.clientHeight or height
+    result = {}
 
-  if crop and height and result.height > height
+    result.title          = document.title if document?.title?
+
+    if false # debug
+      result.documentWidth  = document.width if document?.width?
+      result.documentHeight = document.height if document?.height?
+      result.innerWidth     = window.innerWidth if window?.innerWidth?
+      result.innerHeight    = window.innerHeight if window?.innerHeight?
+      result.clientWidth    = document.body.clientWidth if document?.body?.clientWidth?
+      result.clientHeight   = document.body.clientHeight if document?.body?.clientHeight?
+
+    result
+
+  if crop and width > 0 and height > 0
     # Cropping isn't exactly what we want, but PhantomJS does
     # not yet have a "window size" concept (See NOTE above).
     page.clipRect =
@@ -29,10 +39,14 @@ render = ->
       height: height
 
     result.height = height
-    result.width = width
+    result.width  = width
+
+  delete result.height unless result.height
+  delete result.width  unless result.width
 
   result.imageData = page.renderBase64(format)
   result.format = format
+
   console.log JSON.stringify(result)
   phantom.exit()
 
@@ -70,9 +84,7 @@ phantom.onError = (msg, trace) ->
   phantom.exit 1
 
 page.onLoadFinished = (status) ->
-  loaded = page.evaluate(->
-    !!document.body
-  )
+  loaded = page.evaluate -> !!document.body
   setTimeout render, 300  if status is "success" or loaded is true
 
 page.open url
