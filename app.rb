@@ -2,7 +2,6 @@ require 'env'
 
 require 'sinatra'
 require 'slim'
-require 'uri'
 
 require "screenshotter"
 
@@ -21,28 +20,23 @@ get '/' do
 end
 
 post '/snap' do
-  begin
-    url      = URI.parse(params[:url])
-    callback = URI.parse(params[:callback])
-    width    = params[:width] && params[:width].to_i
-    height   = params[:height] && params[:height].to_i
-    format   = params[:format] || "png"
+  url      = params[:url]
+  callback = params[:callback]
+  width    = params[:width] && params[:width].to_i
+  height   = params[:height] && params[:height].to_i
+  format   = params[:format]
 
-    possible = Screenshotter.plan(
-      format: format,
-      width: width,
-      height: height,
-      url: url,
-      callback: callback)
+  possible = Screenshotter.plan(
+    format: format,
+    width: width,
+    height: height,
+    url: url,
+    callback: callback)
 
-    if possible
-      status 200
-      "OK"
-    else
-      status 400
-      "ERROR"
-    end
-  rescue URI::InvalidURIError
+  if possible
+    status 200
+    "OK"
+  else
     status 400
     "ERROR"
   end

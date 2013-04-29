@@ -4,4 +4,10 @@ require "queue_classic"
 require "queue_classic/tasks"
 require 'dotenv/tasks'
 
+STDOUT.sync = true
+STDERR.sync = true
+
+# For worker...
+autoload :Screenshotter, "screenshotter"
+
 task :environment => :dotenv

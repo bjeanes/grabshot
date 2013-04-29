@@ -1,60 +1,44 @@
-require 'thread'
 require 'multi_json'
 require 'net/http'
 require 'net/https'
+require 'queue_classic'
 
 class Screenshotter
-  QUEUE  = Queue.new
   SCRIPT = File.expand_path('../render.coffee', __FILE__)
 
-  (ENV['WORKER_COUNT'] || 1).to_i.times do |worker_id|
-    Thread.new do
-      me = Thread.current
-      me[:id] = worker_id
-      me[:job_id] = -1
-
-      loop do
-        begin
-          me[:job_id] += 1
-          Screenshotter.take QUEUE.pop, "#{me[:id]}-#{me[:job_id]}"
-        rescue => e
-          log_exception e
-        end
-      end
-    end
-  end
-
-  def self.take(params, id)
-    puts "[#{id}] Processing: #{params.inspect}"
+  def self.perform(params)
+    puts "Processing: #{params.inspect}"
     params = params.dup
 
-    url      = params[:url].to_s
-    format   = params[:format].to_s.upcase
-    width    = params[:width]
-    height   = params[:height]
+    url      = params["url"]
+    format   = params["format"].upcase
+    width    = params["width"]
+    height   = params["height"]
     cmd      = "phantomjs #{SCRIPT} #{url.inspect} #{format} #{width} #{height}"
 
-    puts "[#{id}] Executing: #{cmd}"
+    puts "Executing: #{cmd}"
     json = MultiJson.load(%x[#{cmd}])
 
     params.merge!(
-      width: json["width"],
-      height: json["height"],
-      title: json["title"],
-      imageData: json["imageData"])
+      "width"     => json["width"],
+      "height"    => json["height"],
+      "title"     => json["title"],
+      "format"    => format,
+      "imageData" => json["imageData"])
 
     respond(:success, params)
   rescue MultiJson::LoadError => e
     log_exception(e)
     respond(:error, params)
   ensure
-    params[:imageData] = params[:imageData].to_s[0, 20] + "..."
-    puts "[#{id}] Processed: #{params.inspect}"
+    params["imageData"] = params["imageData"].to_s[0, 20] + "..."
+    puts "Processed: #{params.inspect}"
   end
 
   def self.plan(params)
+    params[:format] ||= "png"
     if valid? params
-      QUEUE.push params
+      QC.enqueue "Screenshotter.perform", params
       true
     else
       false
@@ -68,17 +52,17 @@ class Screenshotter
   def self.respond(status, params = {})
     params[:status] = status
 
-    uri = params[:callback]
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.ssl_timeout = 5
-    http.open_timeout = 5
-    http.read_timeout = 10
+    uri                   = URI.parse(params["callback"])
+    http                  = Net::HTTP.new(uri.host, uri.port)
+    http.ssl_timeout      = 5
+    http.open_timeout     = 5
+    http.read_timeout     = 10
     http.continue_timeout = 10
-    http.use_ssl = true if params[:callback].scheme == "https"
-    headers = {'Content-Type' =>'application/json'}
-    request = Net::HTTP::Post.new(uri.request_uri, headers)
+    http.use_ssl          = true if uri.scheme == "https"
+    headers               = {'Content-Type' => 'application/json'}
+    request               = Net::HTTP::Post.new(uri.request_uri, headers)
     request["User-Agent"] = "Grabshot (https://github.com/bjeanes/grabshot)"
-    request.body = MultiJson.dump(params)
+    request.body          = MultiJson.dump(params)
     http.request(request)
   rescue => e
     log_exception e
@@ -92,11 +76,14 @@ class Screenshotter
   end
 
   def self.http?(uri)
+    uri = URI.parse(uri)
     !!(uri &&
       uri.scheme =~ /^https?$/ &&
       uri.host &&
       (development? ||
         uri.host !~ /^\d|localhost|\[/))
+  rescue URI::InvalidURIError, ArgumentError => e
+    log_exception e
   end
 
   def self.development?
