@@ -1,1 +1,1 @@
-concurrency: "console=0,web=1"
+concurrency: "web=1,worker=1"

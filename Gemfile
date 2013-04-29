@@ -5,6 +5,7 @@ if ENV["HEROKU"]
   ruby "1.9.3", :engine => engine, :engine_version => version
 end
 
+gem 'rake'
 gem 'sinatra'
 gem 'multi_json'
 gem 'slim'
