@@ -1,2 +1,2 @@
-https://github.com/heroku/heroku-buildpack-ruby.git
-http://github.com/stomita/heroku-buildpack-phantomjs.git
+git://github.com/stomita/heroku-buildpack-phantomjs.git
+git://github.com/heroku/heroku-buildpack-ruby.git
