@@ -15,19 +15,11 @@ setTimeout ->
 
 render = ->
   result = page.evaluate ->
-    result = {}
+    title: document.title
+    width: document.body?.clientWidth or width
+    height: document.body?.clientHeight or height
 
-    result.title          = document.title if document?.title?
-    # result.documentWidth  = document.width if document?.width?
-    # result.documentHeight = document.height if document?.height?
-    # result.innerWidth     = window.innerWidth if window?.innerWidth?
-    # result.innerHeight    = window.innerHeight if window?.innerHeight?
-    # result.clientWidth    = document.body.clientWidth if document?.body?.clientWidth?
-    # result.clientHeight   = document.body.clientHeight if document?.body?.clientHeight?
-
-    result
-
-  if crop #and height and result.height > height
+  if crop and height and result.height > height
     # Cropping isn't exactly what we want, but PhantomJS does
     # not yet have a "window size" concept (See NOTE above).
     page.clipRect =
@@ -36,11 +28,8 @@ render = ->
       width: width
       height: height
 
-    # result.height = height
-    # result.width  = width
-
-  # delete result.height unless result.height
-  # delete result.width  unless result.width
+    result.height = height
+    result.width = width
 
   result.imageData = page.renderBase64(format)
   result.format = format
