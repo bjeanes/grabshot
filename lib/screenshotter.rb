@@ -87,7 +87,7 @@ class Screenshotter
       uri.scheme =~ /^https?$/ &&
       uri.host &&
       (development? ||
-        uri.host !~ /^\d|localhost|\[/))
+        uri.host !~ /^([0-9.]+$)|localhost|\[/))
   rescue URI::InvalidURIError, ArgumentError => e
     log_exception e
   end
