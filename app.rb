@@ -4,6 +4,7 @@ require 'sinatra'
 require 'slim'
 
 require "screenshotter"
+require 'queue_classic'
 
 configure :development do
   require 'rack/reloader'
@@ -40,4 +41,9 @@ post '/snap' do
     status 400
     "ERROR"
   end
+end
+
+get '/admin/queue' do
+  queue_name = params[:queue] || QC::QUEUE
+  QC::Queries.count(queue_name).to_s
 end
