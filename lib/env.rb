@@ -1,7 +1,10 @@
 require 'rubygems'
 require 'bundler'
 Bundler.setup
-require "dotenv" # this can set a default RACK_ENV
+
+# Allow .env file to set RACK_ENV
+require "dotenv"
+Dotenv.load
 
 module Grabshot
   def self.environment
