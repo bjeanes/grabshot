@@ -66,6 +66,12 @@ class Screenshotter
     http.request(request)
   rescue => e
     log_exception e
+
+    if params[:status] == :success
+      params[:error] = e.class.name
+      params.delete(:imageData)
+      respond(:error, params)
+    end
   end
 
   def self.valid?(params)
