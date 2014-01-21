@@ -36,7 +36,7 @@ and [Heroku's default Ruby buildpack](https://github.com/heroku/heroku-buildpack
 Depending on the order of the buildpacks and any other buildpacks you have, you may need to
 explicitly tweak some environment variables so the app can find `phantomjs`:
 
-    heorku config:add \
+    heroku config:add \
       PATH="/usr/local/bin:/usr/bin:/bin:/app/vendor/phantomjs/bin" \
       LD_LIBRARY_PATH="/usr/local/lib:/usr/lib:/lib:/app/vendor/phantomjs/lib"
 
