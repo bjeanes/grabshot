@@ -1,9 +1,6 @@
 source 'https://rubygems.org'
 
-if ENV["HEROKU"]
-  engine, version = *ENV["RUBY_ENGINE"].split("-")
-  ruby "1.9.3", :engine => engine, :engine_version => version
-end
+ruby '1.9.3'
 
 gem 'rake'
 gem 'sinatra'

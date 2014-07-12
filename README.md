@@ -45,18 +45,6 @@ explicitly tweak some environment variables so the app can find `phantomjs`:
 Since, for now, the image capturing is done in Threads, using JRuby or
 Rubinius is advised.
 
-The `Gemfile` is already configured to specify Rubinius if the correct
-environment variables are set. This allows Heroku to set up the correct Ruby as per
-[this article](https://blog.heroku.com/archives/2012/12/13/run_jruby_on_heroku_right_now).
-
-For instance, I run the app on Heroku by doing the following:
-
-    heroku labs:enable user-env-compile # so ENV vars are available when bundling
-    heroku config:add RUBY_ENGINE="rbx-2.0.0.rc1" # Bump when 2.0.0 is out
-    git push heroku
-
-For more on `user-env-compile`, see [this article](https://devcenter.heroku.com/articles/labs-user-env-compile).
-
 ## TODO
 
 See [here](https://trello.com/board/grabshot/516df20a8e01421844001ad0).
