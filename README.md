@@ -24,21 +24,7 @@ Then, to run the application:
 
 ### Heroku
 
-On Heroku, use a buildpack that includes PhantomJS.
-
-I use [heroku-buildpack-multi](https://github.com/ddollar/heroku-buildpack-multi) to combine
-[heroku-buildpack-phantomjs](https://github.com/stomita/heroku-buildpack-phantomjs)
-and [Heroku's default Ruby buildpack](https://github.com/heroku/heroku-buildpack-ruby)
-(look at [`.buildpacks`](.buildpacks)):
-
-    heroku config:add BUILDPACK_URL=https://github.com/ddollar/heroku-buildpack-multi.git`
-
-Depending on the order of the buildpacks and any other buildpacks you have, you may need to
-explicitly tweak some environment variables so the app can find `phantomjs`:
-
-    heroku config:add \
-      PATH="/usr/local/bin:/usr/bin:/bin:/app/vendor/phantomjs/bin" \
-      LD_LIBRARY_PATH="/usr/local/lib:/usr/lib:/lib:/app/vendor/phantomjs/lib"
+[![Deploy on Heroku](https://i.cloudup.com/sjLqTMcojN.svg)](https://heroku.com/deploy)
 
 #### Ruby Engine
 
