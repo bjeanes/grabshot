@@ -26,6 +26,8 @@ Then, to run the application:
 
 [![Deploy on Heroku](https://i.cloudup.com/sjLqTMcojN.svg)](https://heroku.com/deploy)
 
+Then, just run `heroku ps:scale worker=1 -a YOUR-APP-NAME` to boot the workers.
+
 #### Ruby Engine
 
 Since, for now, the image capturing is done in Threads, using JRuby or
