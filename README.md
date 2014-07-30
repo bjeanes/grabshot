@@ -24,7 +24,7 @@ Then, to run the application:
 
 ### Heroku
 
-[![Deploy on Heroku](https://i.cloudup.com/sjLqTMcojN.svg)](https://heroku.com/deploy)
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
 Then, just run `heroku ps:scale worker=1 -a YOUR-APP-NAME` to boot the workers.
 
